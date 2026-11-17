@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدينة قوانين الفيزياء الذكية - ثانوية العلاية الأولى</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #0284c7;
+            --accent: #f59e0b;
+            --bg-light: #f0f9ff;
+            --text-dark: #0f172a;
+            --card-bg: #ffffff;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f8fafc 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-bottom: 5px solid var(--accent);
+        }
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            font-weight: 600;
+        }
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 0.3rem 1rem;
+            border-radius: 50px;
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+        main {
+            max-width: 1100px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            flex: 1;
+        }
+        .intro {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        .intro h2 {
+            color: var(--primary);
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.8rem;
+            box-shadow: 0 10px 25px rgba(2, 132, 199, 0.08);
+            border-top: 6px solid var(--secondary);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 35px rgba(2, 132, 199, 0.15);
+            border-top-color: var(--accent);
+        }
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            background: var(--bg-light);
+            width: 65px;
+            height: 65px;
+            line-height: 65px;
+            text-align: center;
+            border-radius: 14px;
+        }
+        .card h3 {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-bottom: 0.6rem;
+        }
+        .card p {
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.2rem;
+        }
+        .formula-box {
+            background: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 0.7rem;
+            text-align: center;
+            font-weight: 700;
+            color: var(--secondary);
+            font-size: 1.1rem;
+            direction: ltr;
+        }
+        .btn-explore {
+            display: block;
+            width: 100%;
+            margin-top: 1.2rem;
+            padding: 0.7rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-explore:hover {
+            background: var(--secondary);
+        }
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 550px;
+            width: 100%;
+            padding: 2rem;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            animation: popIn 0.3s ease;
+            position: relative;
+        }
+        @keyframes popIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .close-btn {
+            position: absolute;
+            top: 1.2rem;
+            left: 1.2rem;
+            background: #f1f5f9;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #475569;
+        }
+        .modal-title {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+        }
+        .modal-body p {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+            color: #334155;
+        }
+        .calc-box {
+            background: var(--bg-light);
+            padding: 1.2rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+        }
+        .calc-box h4 {
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+        }
+        .input-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .input-group input {
+            flex: 1;
+            min-width: 100px;
+            padding: 0.6rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+        .calc-btn {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .calc-result {
+            margin-top: 0.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.05rem;
+        }
+        footer {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 3rem;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🏙️ مدينة قوانين الفيزياء الذكية</h1>
+    <p>مبادرة مدن المستقبل - ثانوية العلاية الأولى</p>
+    <div class="badge">إعداد المعلمة: بدرية محمد القرني</div>
+</header>
+
+<main>
+    <div class="intro">
+        <h2>مرحباً بكِ في أحياء المدينة الذكية!</h2>
+        <p>اضغطي على أي مبنى في المدينة لاستكشاف القانون الفيزيائي وتجربة الحاسبة التفاعلية</p>
+    </div>
+
+    <div class="grid">
+        <!-- حي الحركة والقوى -->
+        <div class="card" onclick="openModal('newton')">
+            <div class="card-icon">🚗</div>
+            <h3>برج النقل الذكي (قانون نيوتن الثاني)</h3>
+            <p>تتحكم أنظمة المرور الذكية بتسارع المركبات ذاتية القيادة بناءً على كتلتها والقوة المحركة لضمان السلامة.</p>
+            <div class="formula-box">F = m × a</div>
+            <button class="btn-explore">دخول البرج والتجربة</button>
+        </div>
+
+        <!-- حي الطاقة النظيفة -->
+        <div class="card" onclick="openModal('energy')">
+            <div class="card-icon">⚡</div>
+            <h3>محطة الطاقة النظيفة (طاقة الحركة)</h3>
+            <p>تستثمر المدينة طاقة الرياح والمياه المتدفقة لتوليد كهرباء نظيفة ومستدامة لجميع الأحياء السكنية.</p>
+            <div class="formula-box">KE = ½ × m × v²</div>
+            <button class="btn-explore">دخول المحطة والتجربة</button>
+        </div>
+
+        <!-- حي الشبكات الذكية -->
+        <div class="card" onclick="openModal('ohm')">
+            <div class="card-icon">💡</div>
+            <h3>مركز التحكم الكهربائي (قانون أوم)</h3>
+            <p>توزع الشبكات الذكية الجهد والتيار الكهربائي بدقة متناهية لمنع الهدر وحماية الأجهزة المنزلية.</p>
+            <div class="formula-box">V = I × R</div>
+            <button class="btn-explore">دخول المركز والتجربة</button>
+        </div>
+
+        <!-- حي الاتصالات -->
+        <div class="card" onclick="openModal('wave')">
+            <div class="card-icon">📡</div>
+            <h3>برج الاتصالات الفائق (سرعة الموجة)</h3>
+            <p>تعتمد شبكات الجيل السادس وأجهزة الاستشعار في المدينة على الموجات الكهرومغناطيسية لنقل البيانات لحظياً.</p>
+            <div class="formula-box">v = λ × f</div>
+            <button class="btn-explore">دخول البرج والتجربة</button>
+        </div>
+
+        <!-- حي الهندسة والمباني -->
+        <div class="card" onclick="openModal('pressure')">
+            <div class="card-icon">🏗️</div>
+            <h3>ناطحات السحاب المستدامة (الضغط)</h3>
+            <p>يُراعى في تصميم أساسات المباني الذكية توزيع القوة على المساحة لضمان الثبات ومقاومة الرياح.</p>
+            <div class="formula-box">P = F / A</div>
+            <button class="btn-explore">دخول المبنى والتجربة</button>
+        </div>
+
+        <!-- حي الفضاء والجاذبية -->
+        <div class="card" onclick="openModal('gravity')">
+            <div class="card-icon">🛰️</div>
+            <h3>مرصد الأقمار الصناعية (الجاذبية)</h3>
+            <p>تدور أقمار المراقبة البيئية حول الأرض بدقة عالية لمراقبة الطقس وجودة الهواء في المدينة.</p>
+            <div class="formula-box">Fg = G × (m₁m₂ / r²)</div>
+            <button class="btn-explore">دخول المرصد والتجربة</button>
+        </div>
+    </div>
+</main>
+
+<!-- نافذة التفاعل -->
+<div class="modal" id="infoModal" onclick="closeModalOnBg(event)">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal()">✕</button>
+        <h3 class="modal-title" id="mTitle"></h3>
+        <div class="modal-body" id="mBody"></div>
+    </div>
+</div>
+
+<footer>
+    <p>ثانوية العلاية الأولى - قسم الفيزياء | تصميم وتنفيذ: أ. بدرية محمد القرني © 2026</p>
+</footer>
+
+<script>
+    const data = {
+        newton: {
+            title: "🚗 برج النقل الذكي - قانون نيوتن الثاني",
+            desc: "ينص القانون على أن تسارع الجسم يتناسب طردياً مع القوة المحصلة المؤثرة فيه وعكسياً مع كتلته. في مدن المستقبل، تحسب الحواسيب القوة اللازمة لإيقاف المركبات الذكية بأمان.",
+            calcHtml: `
+                <h4>حاسبة القوة المحصلة (F)</h4>
+                <div class="input-group">
+                    <input type="number" id="val1" placeholder="الكتلة m (كجم)">
+                    <input type="number" id="val2" placeholder="التسارع a (م/ث²)">
+                    <button class="calc-btn" onclick="calcMultiply('نيوتن (N)')">احسب</button>
+                </div>
+                <div class="calc-result" id="res"></div>
+            `
+        },
+        energy: {
+            title: "⚡ محطة الطاقة النظيفة - الطاقة الحركية",
+            desc: "تمتلك توربينات الرياح والمياه طاقة حركية تتحول إلى طاقة كهربائية نظيفة تغذي المدينة دون انبعاثات كربونية.",
+            calcHtml: `
+                <h4>حاسبة الطاقة الحركية (KE)</h4>
+                <div class="input-group">
+                    <input type="number" id="val1" placeholder="الكتلة m (كجم)">
+                    <input type="number" id="val2" placeholder="السرعة v (م/ث)">
+                    <button class="calc-btn" onclick="calcKE()">احسب</button>
+                </div>
+                <div class="calc-result" id="res"></div>
+            `
+        },
+        ohm: {
+            title: "💡 مركز التحكم الكهربائي - قانون أوم",
+            desc: "يربط قانون أوم بين فرق الجهد الكهربائي (V) وشدة التيار (I) والمقاومة (R)، مما يساعد العدادات الذكية على ترشيد الاستهلاك.",
+            calcHtml: `
+                <h4>حاسبة فرق الجهد (V)</h4>
+                <div class="input-group">
+                    <input type="number" id="val1" placeholder="شدة التيار I (أمبير)">
+                    <input type="number" id="val2" placeholder="المقاومة R (أوم)">
+                    <button class="calc-btn" onclick="calcMultiply('فولت (V)')">احسب</button>
+                </div>
+                <div class="calc-result" id="res"></div>
+            `
+        },
+        wave: {
+            title: "📡 برج الاتصالات الفائق - سرعة الموجة",
+            desc: "تنتقل الإشارات اللاسلكية بسرعة الضوء، وتساعد معرفة التردد والطول الموجي في تصميم شبكات اتصال فائقة السرعة.",
+            calcHtml: `
+                <h4>حاسبة سرعة الموجة (v)</h4>
+                <div class="input-group">
+                    <input type="number" id="val1" placeholder="الطول الموجي λ (متر)">
+                    <input type="number" id="val2" placeholder="التردد f (هرتز)">
+                    <button class="calc-btn" onclick="calcMultiply('م/ث')">احسب</button>
+                </div>
+                <div class="calc-result" id="res"></div>
+            `
+        },
+        pressure: {
+            title: "🏗️ ناطحات السحاب المستدامة - الضغط",
+            desc: "الضغط هو القوة المؤثرة عمودياً على وحدة المساحة. كلما زادت مساحة قواعد المبنى قلّ الضغط على التربة.",
+            calcHtml: `
+                <h4>حاسبة الضغط (P)</h4>
+                <div class="input-group">
+                    <input type="number" id="val1" placeholder="القوة F (نيوتن)">
+                    <input type="number" id="val2" placeholder="المساحة A (م²)">
+                    <button class="calc-btn" onclick="calcDivide('باسكال (Pa)')">احسب</button>
+                </div>
+                <div class="calc-result" id="res"></div>
+            `
+        },
+        gravity: {
+            title: "🛰️ مرصد الأقمار الصناعية - قانون الجذب العام",
+            desc: "تبقى الأقمار الصناعية في مداراتها حول الأرض بفضل التوازن بين قوة الجاذبية الأرضية وسرعتها المدارية.",
+            calcHtml: `
+                <h4>حاسبة الوزن على الأرض (Fg = m × 9.8)</h4>
+                <div class="input-group">
+                    <input type="number" id="val1" placeholder="كتلة القمر الصناعي (كجم)">
+                    <button class="calc-btn" onclick="calcWeight()">احسب</button>
+                </div>
+                <div class="calc-result" id="res"></div>
+            `
+        }
+    };
+
+    function openModal(key) {
+        const item = data[key];
+        document.getElementById('mTitle').innerText = item.title;
+        document.getElementById('mBody').innerHTML = `<p>${item.desc}</p><div class="calc-box">${item.calcHtml}</div>`;
+        document.getElementById('infoModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('infoModal').style.display = 'none';
+    }
+
+    function closeModalOnBg(e) {
+        if (e.target.id === 'infoModal') closeModal();
+    }
+
+    function calcMultiply(unit) {
+        const a = parseFloat(document.getElementById('val1').value);
+        const b = parseFloat(document.getElementById('val2').value);
+        if (isNaN(a) || isNaN(b)) return showRes("الرجاء إدخال أرقام صحيحة");
+        showRes("النتيجة = " + (a * b).toFixed(2) + " " + unit);
+    }
+
+    function calcDivide(unit) {
+        const a = parseFloat(document.getElementById('val1').value);
+        const b = parseFloat(document.getElementById('val2').value);
+        if (isNaN(a) || isNaN(b) || b === 0) return showRes("الرجاء إدخال أرقام صحيحة (المساحة لا تساوي صفراً)");
+        showRes("النتيجة = " + (a / b).toFixed(2) + " " + unit);
+    }
+
+    function calcKE() {
+        const m = parseFloat(document.getElementById('val1').value);
+        const v = parseFloat(document.getElementById('val2').value);
+        if (isNaN(m) || isNaN(v)) return showRes("الرجاء إدخال أرقام صحيحة");
+        showRes("الطاقة الحركية = " + (0.5 * m * v * v).toFixed(2) + " جول (J)");
+    }
+
+    function calcWeight() {
+        const m = parseFloat(document.getElementById('val1').value);
+        if (isNaN(m)) return showRes("الرجاء إدخال الكتلة");
+        showRes("قوة الجذب (الوزن) = " + (m * 9.8).toFixed(2) + " نيوتن (N)");
+    }
+
+    function showRes(text) {
+        document.getElementById('res').innerText = text;
+    }
+</script>
+
+</body>
+</html>
